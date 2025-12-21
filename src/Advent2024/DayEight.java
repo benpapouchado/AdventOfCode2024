@@ -106,7 +106,7 @@ public class DayEight extends Read {
         int r = first[0] - dy;
         int c = first[1] - dx;
 
-        while (r >= 0 && r < rows && c >= 0 && c < cols) {
+        while (r >= 0 && c >= 0) {
             list.add(new int[]{r, c});
             r = r - dy;
             c = c - dx;
@@ -115,7 +115,7 @@ public class DayEight extends Read {
         r = first[0] + dy;
         c = first[1] + dx;
 
-        while (r >= 0 && r < rows && c >= 0 && c < cols) {
+        while (r < rows && c < cols) {
             list.add(new int[]{r, c});
             r = r + dy;
             c = c + dx;
