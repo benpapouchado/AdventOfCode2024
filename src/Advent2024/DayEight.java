@@ -101,10 +101,6 @@ public class DayEight extends Read {
         int dx = second[1] - first[1];
         int dy = second[0] - first[0];
 
-        int g = gcd(Math.abs(dx), Math.abs(dy));
-        dx /= g;
-        dy /= g;
-
         List<int[]> list = new ArrayList<>();
 
         int r = first[0] - dy;
@@ -167,7 +163,7 @@ public class DayEight extends Read {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> lines = read("");
+        List<String> lines = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
         char[][] board = convertGrid(lines);
         System.out.println(anti_node_count(board));
         System.out.println(all_anti_nodes_count(board));
