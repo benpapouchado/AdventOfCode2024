@@ -1,6 +1,3 @@
-import org.junit.Assert;
-import org.junit.Test;
-
 public class Diamond {
 
     public static String create_diamond_shape(char letter, char lower_bound, char upper_bound, String message) {
@@ -49,6 +46,5 @@ public class Diamond {
         System.out.println(upper_case_diamond('G'));
         System.out.println(lower_case_diamond('d'));
         System.out.println(number_diamond('4'));
-
     }
 }

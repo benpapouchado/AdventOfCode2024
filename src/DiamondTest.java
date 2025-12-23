@@ -63,3 +63,15 @@ public class DiamondTest {
         Diamond.upper_case_diamond('s');
     }
 }
+
+//max vals, min vals, middle
+//incorrect inputs
+//allow inputs
+//more tests
+//main method more efficient
+//regex
+//O notation
+//make runnable- functioning app. with Scanner
+//use good names
+// figure out how to talk through it all.
+// why did you do it this way
