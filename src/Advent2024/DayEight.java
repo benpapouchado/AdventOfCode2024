@@ -163,7 +163,7 @@ public class DayEight extends Read {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> lines = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
+        List<String> lines = read("");
         char[][] board = convertGrid(lines);
         System.out.println(anti_node_count(board));
         System.out.println(all_anti_nodes_count(board));
