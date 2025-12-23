@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Read {
 
@@ -16,6 +17,23 @@ public class Read {
         String line;
         while ((line = bf.readLine()) != null) {
             list.add(line);
+        }
+        return list;
+    }
+
+    public static List<List<Integer>> read_lines(String file) throws IOException {
+        List<List<Integer>> list = new ArrayList<>();
+        FileReader fr = new FileReader(file);
+        BufferedReader bf = new BufferedReader(fr);
+        String line;
+        while((line = bf.readLine()) != null){
+            String[] s = line.split(" ");
+            List<Integer> temp = new ArrayList<>();
+
+            for(String x : s){
+                temp.add(Integer.parseInt(x));
+            }
+            list.add(new ArrayList<>(temp));
         }
         return list;
     }
@@ -34,4 +52,11 @@ public class Read {
                 .mapToInt(Integer::parseInt)
                 .toArray();
     }
+
+    public static List<Integer> convertStringArrayToIntList(String line, String splitter) {
+        return Arrays.stream(line.split(splitter))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+    }
+
 }

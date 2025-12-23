@@ -4,24 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class DayTwo {
-
-    public static List<List<Integer>> read(String file) throws IOException {
-        List<List<Integer>> list = new ArrayList<>();
-        FileReader fr = new FileReader(file);
-        BufferedReader bf = new BufferedReader(fr);
-        String line;
-        while((line = bf.readLine()) != null){
-            String[] s = line.split(" ");
-            List<Integer> temp = new ArrayList<>();
-
-            for(String x : s){
-                temp.add(Integer.parseInt(x));
-            }
-            list.add(new ArrayList<>(temp));
-        }
-        return list;
-    }
+public class DayTwo extends Read{
 
     public static boolean checkLine(List<Integer> row){
         Set<Integer> checker = new HashSet<>();
@@ -83,7 +66,7 @@ public class DayTwo {
     }
 
     public static void main(String[] args) throws IOException {
-        List<List<Integer>> read = read("");
+        List<List<Integer>> read = read_lines("");
         System.out.println(countLines(read));
     }
 }
