@@ -125,7 +125,7 @@ public class DayNine extends Read {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> lines = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
+        List<String> lines = read("");
         String one = lines.get(0);
         String two = lines.get(0);
 
