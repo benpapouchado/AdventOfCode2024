@@ -59,4 +59,10 @@ public class Read {
                 .collect(Collectors.toList());
     }
 
+    public static List<Long> convertStringArrayToLongList(String line, String splitter) {
+        return Arrays.stream(line.split(splitter))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+    }
+
 }
