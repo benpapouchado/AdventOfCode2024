@@ -5,7 +5,6 @@ import java.util.*;
 
 public class DayTwelve extends Read {
 
-
     public static char[][] convert_board(List<String> list) {
         char[][] board = new char[list.size()][list.get(0).length()];
 
@@ -63,10 +62,11 @@ public class DayTwelve extends Read {
                 }
             }
         }
-        return new int[]{perimeter, area};
+        return new int[]{area, perimeter};
     }
 
-    public static int multi_source_bfs(char[][] garden){
+    //part 1
+    public static int multi_source_bfs(char[][] garden) {
         int product_sum = 0;
 
         for (int i = 0; i < garden.length; i++) {
@@ -80,11 +80,120 @@ public class DayTwelve extends Read {
         return product_sum;
     }
 
+    // part 2
+    public static int[] sides_and_area(char[][] garden, int r, int c) {
+        int n = garden.length;
+        int m = garden[0].length;
+        boolean[][] visited = new boolean[n][m];
+        int[] directions = {-1, 0, 1, 0, -1};
+        Queue<int[]> queue = new LinkedList<>();
+        int corners = corners(garden, r, c);
+        int area = 1;
+
+        queue.add(new int[]{r, c});
+        visited[r][c] = true;
+
+        while (!queue.isEmpty()) {
+            int[] plant = queue.poll();
+            int x = plant[0];
+            int y = plant[1];
+
+            for (int i = 0; i < directions.length - 1; i++) {
+
+                int dr = x + directions[i];
+                int dc = y + directions[i + 1];
+
+                if (dr < 0 || dc < 0 || dr >= n || dc >= m) {
+                    continue;
+                }
+
+                if (visited[dr][dc]) continue;
+
+                if (garden[dr][dc] == garden[x][y]) {
+                    visited[dr][dc] = true;
+                    area++;
+                    corners += corners(garden, dr, dc);
+                    queue.add(new int[]{dr, dc});
+                }
+            }
+        }
+
+        for (int i = 0; i < garden.length; i++) {
+            for (int j = 0; j < garden[0].length; j++) {
+                if (visited[i][j]) {
+                    garden[i][j] = '.';
+                }
+            }
+        }
+        return new int[]{area, corners};
+    }
+
+    public static int corners(char[][] garden, int i, int j) {
+        int n = garden.length;
+        int m = garden[0].length;
+
+        int corner = 0;
+        int[] directions = {-1, 0, 1, 0, -1};
+        int[] rotated_direction = {0, 1, 0, -1, 0};
+        int[] diagonal = {-1, 1, 1, -1, -1};
+
+        for (int k = 0; k < 4; k++) {
+            int di = i + directions[k];
+            int dj = j + directions[k + 1];
+
+            int dii = i + rotated_direction[k];
+            int djj = j + rotated_direction[k + 1];
+
+            int diag_i = i + diagonal[k];
+            int diag_j = j + diagonal[k + 1];
+
+            boolean edge1 = di < 0 || dj < 0 || di >= n || dj >= m;
+            boolean edge2 = diag_i < 0 || diag_j < 0 || diag_i >= n || diag_j >= m;
+            boolean edge3 = dii < 0 || djj < 0 || dii >= n || djj >= m;
+
+            char current = garden[i][j];
+
+            char neighbour = edge1 ? '.' : garden[di][dj];
+            char diagonal_neighbour = edge2 ? '.' : garden[diag_i][diag_j];
+            char rotated_neighbour = edge3 ? '.' : garden[dii][djj];
+
+            if (current == neighbour) {
+                if (neighbour != diagonal_neighbour && neighbour == rotated_neighbour) {
+                    corner++;
+                }
+            }
+
+            if (current != neighbour && current != rotated_neighbour) {
+                corner++;
+            }
+        }
+        return corner;
+    }
+
+    public static int multi_source_bfs2(char[][] garden) {
+        int product_sum = 0;
+
+        for (int i = 0; i < garden.length; i++) {
+            for (int j = 0; j < garden[0].length; j++) {
+                if (garden[i][j] != '.') {
+                    int[] sides_and_area = sides_and_area(garden, i, j);
+                    product_sum += sides_and_area[0] * sides_and_area[1];
+                }
+            }
+        }
+        return product_sum;
+    }
+
     public static void main(String[] args) throws IOException {
-        List<String> read = read("");
-        char[][] board = convert_board(read);
+        List<String> read = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
+        char[][] board1 = convert_board(read);
+        char[][] board2 = convert_board(read);
 
         //part 1
-        System.out.println(multi_source_bfs(board));
+        System.out.println(multi_source_bfs(board1));
+
+        //part 2
+        System.out.println(multi_source_bfs2(board2));
+
     }
 }
