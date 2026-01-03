@@ -128,6 +128,10 @@ public class DayTwelve extends Read {
         return new int[]{area, corners};
     }
 
+    public static char edge_check(int dr, int dc, int n, int m, char[][] garden){
+        return dr < 0 || dc < 0 || dr >= n || dc >= m ? '.' : garden[dr][dc];
+    }
+
     public static int corners(char[][] garden, int i, int j) {
         int n = garden.length;
         int m = garden[0].length;
@@ -147,15 +151,11 @@ public class DayTwelve extends Read {
             int diag_i = i + diagonal[k];
             int diag_j = j + diagonal[k + 1];
 
-            boolean edge1 = di < 0 || dj < 0 || di >= n || dj >= m;
-            boolean edge2 = diag_i < 0 || diag_j < 0 || diag_i >= n || diag_j >= m;
-            boolean edge3 = dii < 0 || djj < 0 || dii >= n || djj >= m;
-
             char current = garden[i][j];
 
-            char neighbour = edge1 ? '.' : garden[di][dj];
-            char diagonal_neighbour = edge2 ? '.' : garden[diag_i][diag_j];
-            char rotated_neighbour = edge3 ? '.' : garden[dii][djj];
+            char neighbour = edge_check(di, dj, n, m, garden);
+            char diagonal_neighbour = edge_check(diag_i, diag_j, n, m, garden);
+            char rotated_neighbour = edge_check(dii, djj, n, m, garden);
 
             if (current == neighbour) {
                 if (neighbour != diagonal_neighbour && neighbour == rotated_neighbour) {
