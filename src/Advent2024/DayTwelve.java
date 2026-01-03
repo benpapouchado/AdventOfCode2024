@@ -185,7 +185,7 @@ public class DayTwelve extends Read {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> read = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
+        List<String> read = read("");
         char[][] board1 = convert_board(read);
         char[][] board2 = convert_board(read);
 
