@@ -98,11 +98,73 @@ public class DayThirteen extends Read {
         return tokens;
     }
 
+    //part 1 - thank you A level Further maths
     public static double calculate_tokens(double[][] matrix) {
         double button_a = matrix[0][0];
         double button_b = matrix[1][0];
 
         return 3 * button_a + button_b;
+    }
+
+    //part 2
+    //had to look for hints here but wowwwww this is simpler
+    public static long[] cramers_rule(double[][] target, double[][] instructions){
+        long[][] Ax =  new long[][]{
+               {(long) target[0][0] + 10000000000000L, (long) instructions[0][1]},
+                {(long) target[1][0] + 10000000000000L, (long) instructions[1][1]}
+        };
+
+        long[][] Ay = new long[][]{
+                {(long) instructions[0][0], (long) target[0][0] + 10000000000000L},
+                {(long) instructions[1][0], (long) target[1][0] + 10000000000000L}
+        };
+
+        long det_A = (long) determinant(instructions);
+        long det_Ax = determinant_as_long(Ax);
+        long det_Ay = determinant_as_long(Ay);
+
+        long A = det_Ax/det_A;
+        long B = det_Ay/det_A;
+        return new long[]{A, B};
+    }
+
+    public static long determinant_as_long(long[][] matrix) {
+        long a = matrix[0][0];
+        long b = matrix[0][1];
+        long c = matrix[1][0];
+        long d = matrix[1][1];
+
+        return a * d - b * c;
+    }
+
+    public static long calculate_tokens_as_long(long[] matrix) {
+        long button_a = matrix[0];
+        long button_b = matrix[1];
+
+        return 3L * button_a + button_b;
+    }
+
+    public static boolean moves_are_possible_as_long(double[][] instructions, long[] moves, double[][] target){
+        long button_A = (long) instructions[0][0] * moves[0] + (long) instructions[0][1] * moves[1] - 10000000000000L;
+        long button_B = (long) instructions[1][0] * moves[0] + (long) instructions[1][1] * moves[1] - 10000000000000L;
+
+        return button_A == (long) target[0][0] && button_B == (long) target[1][0];
+    }
+
+    public static long calculate_moves_as_long(List<double[][]> matrices){
+        long tokens = 0;
+
+        for (int i = 0; i < matrices.size(); i += 2) {
+            double[][] target = matrices.get(i + 1);
+            double[][] instructions = matrices.get(i);
+
+            long[] calculated_moves = cramers_rule(target, instructions);
+
+            if (moves_are_possible_as_long(instructions, calculated_moves, target)) {
+                tokens += calculate_tokens_as_long(calculated_moves);
+            }
+        }
+        return tokens;
     }
 
     public static void main(String[] args) throws IOException {
@@ -113,6 +175,11 @@ public class DayThirteen extends Read {
         //part 1
         int tokens = determine_tokens(lines);
         System.out.println(tokens);
+
+        //part2
+        long tokens_as_long = calculate_moves_as_long(lines);
+        System.out.println(tokens_as_long);
+
     }
 }
 
