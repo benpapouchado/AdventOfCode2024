@@ -1,8 +1,7 @@
 package Advent2024;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,26 +91,109 @@ public class DayFourteen extends Read {
         return product;
     }
 
-    public static int calculate_safety_factor(List<int[]> positions_and_velocities, int height, int width, int n){
+    //part 1
+    public static int calculate_safety_factor(List<int[]> positions_and_velocities, int height, int width, int n) {
         for (int[] row : positions_and_velocities) {
             move_robot(row, height, width, n);
         }
-
         return product_of_quadrant_counts(height, width, positions_and_velocities);
     }
 
+    public static void print_robots(List<int[]> positions_and_velocities, int height, int width) {
+        String[][] grid = new String[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = ".";
+            }
+        }
+
+        for (int[] row : positions_and_velocities) {
+            int i = row[1];
+            int j = row[0];
+            grid[i][j] = "#";
+        }
+
+        for (String[] row : grid) {
+            System.out.println();
+            for (String i : row) {
+                System.out.print(i + "");
+            }
+        }
+    }
+
+    public static Map<Integer, List<int[]>> row_counts(List<int[]> positions_and_velocities) {
+        Map<Integer, List<int[]>> row_count = new HashMap<>();
+        for (int[] pos : positions_and_velocities) {
+            List<int[]> row = row_count.getOrDefault(pos[1], new ArrayList<>());
+            row.add(pos);
+            row_count.put(pos[1], row);
+        }
+        return row_count;
+    }
+
+    public static int longest_consecutive_run(List<int[]> row) {
+        row.sort(Comparator.comparingInt(a -> a[0]));
+
+        int longest = 1;
+        int current = 1;
+
+        for (int i = 1; i < row.size(); i++) {
+            if (row.get(i)[0] == row.get(i - 1)[0] + 1) {
+                current++;
+                longest = Math.max(longest, current);
+            } else {
+                current = 1;
+            }
+        }
+        return longest;
+    }
+
+    public static int scan_for_consecutive_robots(Map<Integer, List<int[]>> row_count) {
+        int max = 0;
+        for (List<int[]> row : row_count.values()) {
+            if (row.size() < 2) continue;
+            max = Math.max(max, longest_consecutive_run(row));
+        }
+        return max;
+    }
+
+    //part 2
+    public static int count_seconds(List<int[]> positions_and_velocities, int height, int width) {
+        int n = 0;
+
+        Map<Integer, List<int[]>> row_count;
+        do {
+            for (int[] row : positions_and_velocities) {
+                move_robot(row, height, width, 1);
+            }
+            row_count = row_counts(positions_and_velocities);
+            n++;
+        } while (scan_for_consecutive_robots(row_count) < 12);
+
+        return n;
+    }
 
     public static void main(String[] args) throws IOException {
-        List<String> read = read("");
+        List<String> read = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
 
         List<int[]> positions_and_velocities = extract_positions(read);
-        int n = 100;
         int height = 103;
         int width = 101;
 
-        int safety_factor = calculate_safety_factor(positions_and_velocities, height, width, n);
+        //part1
+        int safety_factor = calculate_safety_factor(positions_and_velocities, height, width, 100);
         System.out.println(safety_factor);
 
+        //part2
+        int seconds = count_seconds(positions_and_velocities, height, width);
+        System.out.println(seconds);
+
+        //displays christmas tree
+        positions_and_velocities = extract_positions(read);
+        for (int[] row : positions_and_velocities) {
+            move_robot(row, height, width, seconds);
+        }
+        print_robots(positions_and_velocities, height, width);
 
     }
 }
