@@ -174,7 +174,7 @@ public class DayFourteen extends Read {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> read = read("/Users/benjaminpapouchado/Documents/Projects/src/input.txt");
+        List<String> read = read("");
 
         List<int[]> positions_and_velocities = extract_positions(read);
         int height = 103;
